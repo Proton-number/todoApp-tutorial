@@ -30,7 +30,6 @@ function App() {
 
      useEffect(() => {
         filterHandler();
-        saveLocalTodos();
      }, [todos, filter]);
 
   
