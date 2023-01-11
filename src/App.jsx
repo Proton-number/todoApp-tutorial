@@ -1,32 +1,61 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
+import Form from './Components/Form'
+import TodoList from './Components/TodoList'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [inputText, setInputText] = useState('')
+  const [todos, setTodos] = useState([]);
+  const [filter, setFilter] = useState('all');
+  const [filtered, setFiltered] = useState([])
+
+
+   const filterHandler = () => {
+    switch(filter){
+
+      case'completed': 
+      setFiltered(todos.filter(todo => todo.completed === true));
+      break;
+
+      case'uncompleted': 
+      setFiltered(todos.filter(todo => todo.completed === false));
+      break;
+
+      default:
+       setFiltered(todos);
+       break;
+    }
+   }
+
+
+     useEffect(() => {
+        filterHandler();
+        saveLocalTodos();
+     }, [todos, filter]);
+
+  
 
   return (
     <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+     
+     <header>
+      <h2>Dacron's Todo List</h2>
+     </header>
+
+     <Form  
+     todos={todos}  
+     setTodos={setTodos} 
+     inputText={inputText}
+     setInputText={setInputText} 
+     setFilter={setFilter}
+     />
+
+     <TodoList 
+     todos={todos} 
+     setTodos={setTodos}
+     filtered={filtered}
+     />
+
     </div>
   )
 }
